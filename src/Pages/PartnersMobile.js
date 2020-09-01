@@ -1,56 +1,121 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import LogIn from "../Components/LogIn";
 import Logo from "../Images/Logo";
+import Close from "../Images/Close";
+import IconRight from "../Images/IconRight";
+import Visiblility from "../Images/Visibility";
+import VisibilityOff from "../Images/VisibilityOff";
 import Partners from "../Images/Partners";
 
 function PartnersMobile(props) {
-  const [activeTab, setActiveTab] = useState(true);
+  const [activeTab, setActiveTab] = useState(false);
+  const [pwvisibility, setPwVisibility] = useState(false);
   const [state, setState] = useState({ name: "", email: "", password: "" });
+  const isRegisterBtnActive = !(
+    state.name.length > 0 &&
+    state.email.length > 0 &&
+    state.password.length > 0
+  );
+  const [error, setError] = useState({ type: 0 });
 
-  function inputRegisterHandler(e) {
+  function inputRegister(e) {
     const { name, value } = e.target;
-    const exprForName = /^[A-Za-z\u3130-\u318F\uAC00-\uD7AF]{2,24}$/; //한글,영문(대소문), 숫자XX
-    const exprForPassword = /^[a-z0-9]{8}$/;
 
-    console.log(exprForName.test(value));
-
-    if (name === "name" && exprForName.test(value)) {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-    if (name === "password" && exprForPassword.test(value)) {
-      setState((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   [name]: value,
-    // }));
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   }
 
-  async function signUpHandler() {
+  const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const regName = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]+$/;
+  const regPassword = /^[a-z0-9]{8,24}$/;
+
+  function btnRegister(e) {
     const { email, name, password } = state;
-    const api =
-      "https://api.buzzikid.com/PartnersApi/member_register.php?email=aaa&password=aa&name=taehee";
+
+    if (!regEmail.test(email)) {
+      setError({ type: 4.5 });
+    }
+
+    if (!regName.test(name)) {
+      setError({ type: 5 });
+    }
+
+    if (!regPassword.test(password)) {
+      setError({ type: 6 });
+    }
+
+    if (
+      regEmail.test(email) &&
+      regName.test(name) &&
+      name.length <= 24 &&
+      regPassword.test(password)
+    ) {
+      console.log("통과");
+      getFetch();
+    }
+  }
+
+  function getFetch() {
+    const { email, name, password } = state;
+    const api = "https://api.buzzikid.com/PartnersApi/member_register.php";
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("name", name);
+    formData.append("password", password);
 
     fetch(api, {
       method: "post",
       headers: {
         Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
       },
-      body: {
-        email,
-        name,
-        password,
-      },
-    }).then((res) => console.log(res));
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.data) {
+          alert("회원가입 성공!");
+        }
+        if (res.error) {
+          if (res.error.type === 1) {
+            alert("다시확인");
+          }
+          if (res.error.type === 2) {
+            alert("서버에러");
+          }
+          if (res.error.type === 3) {
+            alert("회원가입 실패");
+          }
+          if (res.error.type === 4) {
+            setError({ type: 4 }); //이미 사용 중인 이메일 입니다. 다시 시도해 주세요.
+          }
+        }
+      });
   }
 
-  console.log(state);
+  function closeIcon(param) {
+    setError({ type: 0 });
+
+    if (param === "email") {
+      setState((prevState) => ({
+        ...prevState,
+        email: "",
+      }));
+    }
+
+    if (param === "name") {
+      setState((prevState) => ({
+        ...prevState,
+        name: "",
+      }));
+    }
+  }
+
+  function eyeIcon() {
+    setPwVisibility(!pwvisibility);
+  }
 
   return (
     <Container>
@@ -75,7 +140,7 @@ function PartnersMobile(props) {
         <Tab>
           <ul>
             <li onClick={() => setActiveTab(true)}>
-              <div className={activeTab && "tabStyle"}> 가입 </div>
+              <div className={activeTab && "tabStyle"}> 가 입 </div>
             </li>
             <li onClick={() => setActiveTab(false)}>
               <div className={activeTab || "tabStyle"}>로그인</div>
@@ -85,26 +150,81 @@ function PartnersMobile(props) {
         {activeTab ? (
           <>
             <InputBox>
-              <input
-                placeholder="이메일"
-                type="text"
-                className="email"
-                name="email"
-                onChange={inputRegisterHandler}
-              />
-              <input
-                placeholder="이름"
-                type="text"
-                className="name"
-                name="name"
-                onChange={inputRegisterHandler}
-              />
-              <input
-                placeholder="비밀번호 (8글자 이상)"
-                type="password"
-                name="password"
-                onChange={inputRegisterHandler}
-              />
+              <div>
+                <input
+                  placeholder="이메일"
+                  className="error email-border"
+                  name="email"
+                  onChange={inputRegister}
+                  value={state.email}
+                />
+                {error.type === 4 && (
+                  <div className="inputIcon" onClick={() => closeIcon("email")}>
+                    <Close />
+                  </div>
+                )}
+                {error.type === 4.5 && (
+                  <div className="inputIcon" onClick={() => closeIcon("email")}>
+                    <Close />
+                  </div>
+                )}
+              </div>
+              {error.type === 4 && (
+                <div className="emailError">
+                  이미 사용 중인 이메일 입니다. 다시 시도해 주세요.
+                </div>
+              )}
+              {error.type === 4.5 && (
+                <div className="emailError">사용할 수 없는 이메일입니다.</div>
+              )}
+              <div>
+                <input
+                  placeholder="이름"
+                  className="name error"
+                  name="name"
+                  onChange={inputRegister}
+                  value={state.name}
+                />
+                {error.type === 5 && (
+                  <div className="inputIcon" onClick={() => closeIcon("name")}>
+                    <Close />
+                  </div>
+                )}
+              </div>
+              {error.type === 5 && (
+                <div className="nameError">
+                  이름은 영문 소문자, 숫자, 마침표, 밑줄만을 포함할 수 있습니다.
+                </div>
+              )}
+              {error.type === 5.5 && (
+                <div className="nameError">
+                  최대 사용 가능한 글자 수는 24입니다.
+                </div>
+              )}
+              <div>
+                <input
+                  placeholder="비밀번호 (8글자 이상)"
+                  type={pwvisibility ? "text" : "password"}
+                  className="password error"
+                  name="password"
+                  onChange={inputRegister}
+                  value={state.password}
+                />
+                {pwvisibility ? (
+                  <div className="inputIcon" onClick={eyeIcon}>
+                    <Visiblility />
+                  </div>
+                ) : (
+                  <div className="inputIcon" onClick={eyeIcon}>
+                    <VisibilityOff />
+                  </div>
+                )}
+              </div>
+              {error.type === 6 && (
+                <div className="passwordError">
+                  비밀번호는 최소 8자 이상이어야 합니다.
+                </div>
+              )}
             </InputBox>
             <FooterBox>
               <p>
@@ -112,27 +232,26 @@ function PartnersMobile(props) {
                 하는 것으로 간주됩니다.
               </p>
               <div className="terms">
-                <div onClick={() => props.history.push("/TermsOfService")}>
+                <div
+                  onClick={() => props.props.history.push("/TermsOfService")}
+                >
                   서비스 이용약관
                 </div>
-                <div onClick={() => props.history.push("/PrivacyPolicy")}>
+                <div onClick={() => props.props.history.push("/PrivacyPolicy")}>
                   개인 정보 정책
                 </div>
               </div>
-              <Button onClick={() => signUpHandler()}>계속</Button>
+              <RegisterButton
+                disabled={isRegisterBtnActive}
+                onClick={() => btnRegister()}
+                button={isRegisterBtnActive}
+              >
+                계속
+              </RegisterButton>
             </FooterBox>
           </>
         ) : (
-          <>
-            <InputBox>
-              <input placeholder="이메일" className="email" />
-              <input placeholder="비밀번호" />
-            </InputBox>
-            <FooterBox>
-              <div>비밀번호를 잊으셨나요?</div>
-              <Button>로그인</Button>
-            </FooterBox>
-          </>
+          <LogIn />
         )}
       </Content>
     </Container>
@@ -189,7 +308,7 @@ const Header = styled.div`
 
   div {
     position: relative;
-    width 154px;
+    width 154px;    <<<<<<<<<<<<<<<<<<<<<<<<  :  ??
     height: 58px;
 
     .logo {
@@ -215,20 +334,18 @@ const Tab = styled.div`
 
   ul {
     display: flex;
-    justify-content: space-between;
 
     li {
       font-style: normal;
       font-weight: bold;
       font-size: 12px;
       letter-spacing: 0.08em;
-      width: 154px;
+      width: 100%;
       height: 29px;
       text-align: center;
       color: #757575;
 
       .tabStyle {
-        width: 154px;
         height: 29px;
         border-bottom: 1px solid rgb(33, 33, 33);
         color: #212121;
@@ -244,20 +361,39 @@ const InputBox = styled.div`
   padding-right: 16px;
   padding-left: 16px;
 
-  input {
-    padding: 13px;
+  div {
     width: 100%;
-    height: 56px;
-    background: white;
-    font-size: 16px;
+    position: relative;
+
+    input {
+      padding: 13px;
+      width: 100%;
+      height: 56px;
+      background: white;
+      font-size: 16px;
+    }
+
+    .inputIcon {
+      left: 88%;
+      bottom: 5%;
+      position: absolute;
+    }
   }
 
-  .email {
-    margin-bottom: 5%;
+  .emailError,
+  .nameError,
+  .passwordError {
+    font-size: 13px;
+    color: #e64a19;
+    left: 2%;
   }
 
   .name {
-    margin-bottom: 5%;
+    margin-top: 5%;
+  }
+
+  .password {
+    margin-top: 5%;
   }
 `;
 
@@ -293,15 +429,22 @@ const FooterBox = styled.div`
   }
 `;
 
-const Button = styled.button`
+const RegisterButton = styled.button`
   margin-top: 10%;
   height: 48px;
-  background: #bdbdbd;
   border-radius: 4px;
   font-weight: bold;
   font-size: 14px;
   text-align: center;
   letter-spacing: 0.08em;
   color: #FFFFFF;
+  
+
+  ${({ button }) =>
+    button
+      ? `background: #bdbdbd;`
+      : `
+    background: #212121;
+`}
 }
 `;

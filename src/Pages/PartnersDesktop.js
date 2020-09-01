@@ -22,10 +22,6 @@ function PartnersDesktop() {
         [name]: value,
       }));
     }
-    // setState((prevState) => ({
-    //   ...prevState,
-    //   [name]: value,
-    // }));
   }
 
   return (
