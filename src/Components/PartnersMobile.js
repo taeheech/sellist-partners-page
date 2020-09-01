@@ -304,7 +304,7 @@ const TopBar = styled.div`
   display: flex;
   justify-content: flex-end;
 
-  @media screen and (max-width: 1440px) {
+  @media screen and (min-width: 755px) {
     border-radius: 20px;
   }
   div {
