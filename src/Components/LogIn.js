@@ -5,20 +5,15 @@ import IconRight from "../Images/IconRight";
 import Visiblility from "../Images/Visibility";
 import VisibilityOff from "../Images/VisibilityOff";
 
-<<<<<<< HEAD
 function LogIn(props) {
   const propsFromPartnersMobile = props.props;
 
-=======
-function LogIn() {
->>>>>>> merging
   const [loginstate, setLogInState] = useState({
     logInEmail: "",
     logInPassword: "",
   });
   const { logInEmail, logInPassword } = loginstate;
   const isLoginBtnActive = !(logInEmail.length > 0 && logInPassword.length > 0);
-<<<<<<< HEAD
   const [error, setError] = useState({ type: 0 });
   const [correct, setCorrect] = useState(false);
   const [pwvisibility, setPwVisibility] = useState(false);
@@ -27,21 +22,10 @@ function LogIn() {
   function inputLogin(e) {
     //
     const { name, value } = e.target;
-=======
-
-  const [error, setError] = useState({ type: 0 });
-
-  const [pwvisibility, setPwVisibility] = useState(false);
-
-  function inputLogin(e) {
-    const { name, value } = e.target;
-
->>>>>>> merging
     setLogInState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-<<<<<<< HEAD
 
     if (logInEmail === "") {
       setCorrect(false);
@@ -53,25 +37,14 @@ function LogIn() {
     } else {
       setCorrect(false);
     }
-=======
->>>>>>> merging
   }
 
   function btnLogin(e) {
     const { logInEmail, logInPassword } = loginstate;
-<<<<<<< HEAD
-=======
-    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-
->>>>>>> merging
     const api = "https://api.buzzikid.com/PartnersApi/member_login.php";
     const formData = new FormData();
     formData.append("email", logInEmail);
     formData.append("password", logInPassword);
-<<<<<<< HEAD
-=======
-
->>>>>>> merging
     if (!regEmail.test(logInEmail)) {
       setError({ type: 1 });
     } else {
@@ -103,19 +76,12 @@ function LogIn() {
 
   function closeIcon(param) {
     setError({ type: 0 });
-<<<<<<< HEAD
-=======
-
->>>>>>> merging
     if (param === "email") {
       setLogInState((prevState) => ({
         ...prevState,
         logInEmail: "",
       }));
-<<<<<<< HEAD
       setCorrect(false);
-=======
->>>>>>> merging
     }
   }
 
@@ -125,20 +91,12 @@ function LogIn() {
 
   return (
     <>
-<<<<<<< HEAD
       <LoginInputBox correct={correct} error={error}>
-=======
-      <LoginInputBox>
->>>>>>> merging
         <div>
           <input
             value={loginstate.logInEmail}
             placeholder="이메일"
-<<<<<<< HEAD
             className="logInEmail correctEmail errorForEmail"
-=======
-            className="logInEmail"
->>>>>>> merging
             name="logInEmail"
             onChange={inputLogin}
           />
@@ -152,7 +110,6 @@ function LogIn() {
               <Close />
             </div>
           )}
-<<<<<<< HEAD
           {correct &&
             error.type !== 1 &&
             error.type !== 2 &&
@@ -161,8 +118,6 @@ function LogIn() {
                 <IconRight />
               </div>
             )}
-=======
->>>>>>> merging
         </div>
         {error.type === 1 && (
           <div className="emailError">올바른 이메일이 아닙니다.</div>
@@ -193,14 +148,11 @@ function LogIn() {
           <div className="passwordError">비밀번호가 일치하지 않습니다.</div>
         )}
       </LoginInputBox>
-<<<<<<< HEAD
       <ForgetPw
         onClick={() => propsFromPartnersMobile.history.push("/PickNewPwPage")}
       >
         비밀번호를 잊으셨나요?
       </ForgetPw>
-=======
->>>>>>> merging
       <FooterBox>
         <LoginButton
           button={isLoginBtnActive}
@@ -232,7 +184,6 @@ const LoginInputBox = styled.div`
       height: 56px;
       background: white;
       font-size: 16px;
-<<<<<<< HEAD
       margin-bottom: 20px;
     }
 
@@ -243,8 +194,6 @@ const LoginInputBox = styled.div`
     .errorForEmail {
       ${({ error }) => error.type === 1 && `border-bottom: 1px solid red`}
       ${({ error }) => error.type === 2 && `border-bottom: 1px solid red`}
-=======
->>>>>>> merging
     }
 
     .inputIcon {
@@ -252,7 +201,6 @@ const LoginInputBox = styled.div`
       top: 5%;
       position: absolute;
     }
-<<<<<<< HEAD
     .emailError,
     .passwordError {
       font-size: 13px;
@@ -264,22 +212,6 @@ const LoginInputBox = styled.div`
     .logInPassword {
       margin-top: 5%;
     }
-=======
-  }
-
-  .emailError,
-  .passwordError {
-    font-size: 13px;
-    color: #e64a19;
-    left: 2%;
-  }
-
-  .logInEmail {
-  }
-
-  .logInPassword {
-    margin-top: 5%;
->>>>>>> merging
   }
 `;
 
@@ -289,20 +221,12 @@ const FooterBox = styled.div`
   flex-direction: column;
   padding-right: 16px;
   padding-left: 16px;
-<<<<<<< HEAD
-=======
-
->>>>>>> merging
   p {
     height: 18px;
     font-size: 14px;
     text-align: center;
     color: #424242;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> merging
   .terms {
     margin-top: 5%;
     display: flex;
@@ -312,10 +236,6 @@ const FooterBox = styled.div`
     line-height: 14px;
     letter-spacing: 0.08em;
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> merging
   div {
     font-size: 12px;
     line-height: 14px;
@@ -323,21 +243,14 @@ const FooterBox = styled.div`
     color: #212121;
   }
 `;
-<<<<<<< HEAD
 const LoginButton = styled.button`
   margin-top: 25.4%;
-=======
-
-const LoginButton = styled.button`
-  margin-top: 10%;
->>>>>>> merging
   height: 48px;
   border-radius: 4px;
   font-weight: bold;
   font-size: 14px;
   text-align: center;
   letter-spacing: 0.08em;
-<<<<<<< HEAD
   color: #ffffff;
   ${({ button }) =>
     button
@@ -352,15 +265,4 @@ const ForgetPw = styled.div`
   margin-top: 20px;
   font-size: 14px;
   cursor: pointer;
-=======
-  color: #FFFFFF;
-  
-  ${({ button }) =>
-    button
-      ? `background: #bdbdbd;`
-      : `
-      background: #212121;
-  `}
-}
->>>>>>> merging
 `;
