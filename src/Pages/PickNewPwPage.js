@@ -4,12 +4,12 @@ import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
 import PickNewPw from "../Components/PickNewPw";
 
-function PickNewpwPage() {
+function PickNewpwPage(props) {
   return (
     <Container>
       <ImgRight src={Img1} />
       <ImgLeft src={Img2} />
-      <PickNewPw />
+      <PickNewPw props={props} />
     </Container>
   );
 }

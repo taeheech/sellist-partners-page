@@ -6,6 +6,7 @@ import Partners from "../Images/Partners";
 import Snackbar from "@material-ui/core/Snackbar";
 
 function PickNewPw(props) {
+  const propsFromPickNewPwPage = props.props;
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -30,7 +31,7 @@ function PickNewPw(props) {
         </div>
       </TopBar>
       <TopBox>
-        <div onClick={() => props.history.push("/")}>
+        <div onClick={() => propsFromPickNewPwPage.history.push("/")}>
           <ArrowBack />
         </div>
       </TopBox>
@@ -43,7 +44,6 @@ function PickNewPw(props) {
       <InputBox>
         <InputBoxText>비밀번호 찾기</InputBoxText>
         <input
-          type="password"
           placeholder="가입하신 이메일을 입력해주세요."
           className="newPassword"
         />
@@ -179,8 +179,9 @@ const InputBox = styled.div`
 const InputBoxText = styled.div`
   margin-bottom: 32px;
   font-weight: 500;
-  font-size: 21px;
+  font-size: 17px;
   line-height: 25px;
+  margin-left: 10px;
 `;
 
 const FooterBox = styled.div`

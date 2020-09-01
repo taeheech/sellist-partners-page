@@ -4,12 +4,12 @@ import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
 import ResetPw from "../Components/ResetPw";
 
-function ResetPwPage() {
+function ResetPwPage(props) {
   return (
     <Container>
       <ImgRight src={Img1} />
       <ImgLeft src={Img2} />
-      <ResetPw />
+      <ResetPw props={props} />
     </Container>
   );
 }

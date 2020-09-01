@@ -6,6 +6,7 @@ import Partners from "../Images/Partners";
 import Snackbar from "@material-ui/core/Snackbar";
 
 function ResetPw(props) {
+  const propsFromResetPwPage = props.props;
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
@@ -30,7 +31,7 @@ function ResetPw(props) {
         </div>
       </TopBar>
       <TopBox>
-        <div onClick={() => props.history.push("/")}>
+        <div onClick={() => propsFromResetPwPage.history.push("/")}>
           <ArrowBack />
         </div>
       </TopBox>
@@ -141,6 +142,7 @@ const TopBox = styled.div`
   display: flex;
   height: 56px;
   padding: 32px;
+  cursor: pointer;
   @media screen and (min-width: 755px) {
     display: none;
   }

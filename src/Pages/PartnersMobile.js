@@ -308,7 +308,7 @@ const Header = styled.div`
 
   div {
     position: relative;
-    width 154px;    <<<<<<<<<<<<<<<<<<<<<<<<  :  ??
+    width 154px;
     height: 58px;
 
     .logo {
