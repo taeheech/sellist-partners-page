@@ -5,11 +5,13 @@ import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
 
 function HomeDesktop(props) {
+  const propsFromHomePage = props.props;
+
   return (
     <Container>
       <ImgRight src={Img1} />
       <ImgLeft src={Img2} />
-      <PartnersMobile props={props} />
+      <PartnersMobile props={propsFromHomePage} />
       {/* <ResetPsw /> */}
     </Container>
   );

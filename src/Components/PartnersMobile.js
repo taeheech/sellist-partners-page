@@ -3,11 +3,14 @@ import styled from "styled-components";
 import LogIn from "./LogIn";
 import Logo from "../Images/Logo";
 import Close from "../Images/Close";
+import IconRight from "../Images/IconRight";
 import Visiblility from "../Images/Visibility";
 import VisibilityOff from "../Images/VisibilityOff";
 import Partners from "../Images/Partners";
 
 function PartnersMobile(props) {
+  const propsFromHomeDesktop = props.props;
+
   const [activeTab, setActiveTab] = useState(false);
   const [pwvisibility, setPwVisibility] = useState(false);
   const [state, setState] = useState({ name: "", email: "", password: "" });
@@ -17,18 +20,27 @@ function PartnersMobile(props) {
     state.password.length > 0
   );
   const [error, setError] = useState({ type: 0 });
+  const [correct, setCorrect] = useState(false);
+
+  const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  const regName = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]+$/;
+  const regPassword = /^[a-z0-9]{8,24}$/;
+
   function inputRegister(e) {
     const { name, value } = e.target;
     setState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+
+    if (regEmail.test(state.email)) {
+      setCorrect(true);
+    } else {
+      setCorrect(false);
+    }
   }
-  const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-  const regName = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|\*]+$/;
-  const regPassword = /^[a-z0-9]{8,24}$/;
+
   function btnRegister(e) {
-    console.log("클릭(계속)");
     const { email, name, password } = state;
     if (!regEmail.test(email)) {
       setError({ type: 4.5 });
@@ -48,10 +60,10 @@ function PartnersMobile(props) {
       name.length <= 24 &&
       regPassword.test(password)
     ) {
-      console.log("통과");
       getFetch();
     }
   }
+
   function getFetch() {
     const { email, name, password } = state;
     const api = "https://api.buzzikid.com/PartnersApi/member_register.php";
@@ -87,6 +99,7 @@ function PartnersMobile(props) {
         }
       });
   }
+
   function closeIcon(param) {
     setError({ type: 0 });
     if (param === "email") {
@@ -102,9 +115,11 @@ function PartnersMobile(props) {
       }));
     }
   }
+
   function eyeIcon() {
     setPwVisibility(!pwvisibility);
   }
+
   return (
     <Container>
       <TopBar>
@@ -137,11 +152,11 @@ function PartnersMobile(props) {
         </Tab>
         {activeTab ? (
           <>
-            <InputBox>
+            <InputBox correct={correct} error={error}>
               <div>
                 <input
                   placeholder="이메일"
-                  className="error email-border"
+                  className="error correctEmail errorForEmail"
                   name="email"
                   onChange={inputRegister}
                   value={state.email}
@@ -156,6 +171,17 @@ function PartnersMobile(props) {
                     <Close />
                   </div>
                 )}
+                {correct &&
+                  error.type !== 4 &&
+                  error.type !== 4.5 &&
+                  state.email !== "" && (
+                    <div
+                      className="inputIcon"
+                      onClick={() => closeIcon("email")}
+                    >
+                      <IconRight />
+                    </div>
+                  )}
               </div>
               {error.type === 4 && (
                 <div className="emailError">
@@ -168,7 +194,7 @@ function PartnersMobile(props) {
               <div>
                 <input
                   placeholder="이름"
-                  className="name error"
+                  className="name error errorForName"
                   name="name"
                   onChange={inputRegister}
                   value={state.name}
@@ -222,14 +248,14 @@ function PartnersMobile(props) {
               <div className="terms">
                 <div
                   onClick={() =>
-                    props.props.props.history.push("/TermsOfService")
+                    propsFromHomeDesktop.history.push("/TermsOfService")
                   }
                 >
                   서비스 이용약관
                 </div>
                 <div
                   onClick={() =>
-                    props.props.props.history.push("/PrivacyPolicy")
+                    propsFromHomeDesktop.history.push("/PrivacyPolicy")
                   }
                 >
                   개인 정보 정책
@@ -245,7 +271,7 @@ function PartnersMobile(props) {
             </FooterBox>
           </>
         ) : (
-          <LogIn />
+          <LogIn props={propsFromHomeDesktop} />
         )}
       </Content>
     </Container>
@@ -384,6 +410,20 @@ const InputBox = styled.div`
       font-size: 16px;
     }
 
+    .correctEmail {
+      ${({ correct }) => correct && `border-bottom: 1px solid green`}
+    }
+
+    .errorForEmail {
+      ${({ error }) => error.type === 4 && `border-bottom: 1px solid red`}
+      ${({ error }) => error.type === 4.5 && `border-bottom: 1px solid red`}
+    }
+
+    .errorForName {
+      ${({ error }) => error.type === 5 && `border-bottom: 1px solid red`}
+      ${({ error }) => error.type === 5.5 && `border-bottom: 1px solid red`}
+    }
+
     .inputIcon {
       left: 88%;
       bottom: 5%;
@@ -404,49 +444,6 @@ const InputBox = styled.div`
   }
 
   .password {
-    margin-top: 5%;
-  }
-`;
-
-const LoginInputBox = styled.div`
-  margin-top: 10%;
-  display: flex;
-  flex-direction: column;
-  padding-right: 16px;
-  padding-left: 16px;
-
-  div {
-    width: 100%;
-    position: relative;
-
-    input {
-      padding: 13px;
-      width: 100%;
-      height: 56px;
-      background: white;
-      font-size: 16px;
-    }
-
-    .inputIcon {
-      left: 88%;
-      top: 5%;
-      position: absolute;
-    }
-  }
-
-  .emailError,
-  .passwordError {
-    font-size: 13px;
-    color: #e64a19;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    left: 2%;
-  }
-
-  .logInEmail {
-  }
-
-  .logInPassword {
     margin-top: 5%;
   }
 `;
@@ -503,21 +500,4 @@ const RegisterButton = styled.button`
       : `
 background: #212121;
 `};
-`;
-
-const LoginButton = styled.button`
-  margin-top: 28.8%;
-  height: 48px;
-  border-radius: 4px;
-  font-weight: bold;
-  font-size: 14px;
-  text-align: center;
-  letter-spacing: 0.08em;
-  color: #ffffff;
-  ${({ button }) =>
-    button
-      ? `background: #bdbdbd;`
-      : `
-background: #212121;
-`}
 `;

@@ -4,7 +4,10 @@ import Close from "../Images/Close";
 import IconRight from "../Images/IconRight";
 import Visiblility from "../Images/Visibility";
 import VisibilityOff from "../Images/VisibilityOff";
-function LogIn() {
+
+function LogIn(props) {
+  const propsFromPartnersMobile = props.props;
+
   const [loginstate, setLogInState] = useState({
     logInEmail: "",
     logInPassword: "",
@@ -12,17 +15,31 @@ function LogIn() {
   const { logInEmail, logInPassword } = loginstate;
   const isLoginBtnActive = !(logInEmail.length > 0 && logInPassword.length > 0);
   const [error, setError] = useState({ type: 0 });
+  const [correct, setCorrect] = useState(false);
   const [pwvisibility, setPwVisibility] = useState(false);
+  const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+
   function inputLogin(e) {
     const { name, value } = e.target;
     setLogInState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+
+    if (logInEmail === "") {
+      setCorrect(false);
+      setError({ type: 0 });
+    }
+
+    if (regEmail.test(logInEmail)) {
+      setCorrect(true);
+    } else {
+      setCorrect(false);
+    }
   }
+
   function btnLogin(e) {
     const { logInEmail, logInPassword } = loginstate;
-    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     const api = "https://api.buzzikid.com/PartnersApi/member_login.php";
     const formData = new FormData();
     formData.append("email", logInEmail);
@@ -55,6 +72,7 @@ function LogIn() {
         });
     }
   }
+
   function closeIcon(param) {
     setError({ type: 0 });
     if (param === "email") {
@@ -62,19 +80,22 @@ function LogIn() {
         ...prevState,
         logInEmail: "",
       }));
+      setCorrect(false);
     }
   }
+
   function eyeIcon() {
     setPwVisibility(!pwvisibility);
   }
+
   return (
     <>
-      <LoginInputBox>
+      <LoginInputBox correct={correct} error={error}>
         <div>
           <input
             value={loginstate.logInEmail}
             placeholder="이메일"
-            className="logInEmail"
+            className="logInEmail correctEmail errorForEmail"
             name="logInEmail"
             onChange={inputLogin}
           />
@@ -88,6 +109,14 @@ function LogIn() {
               <Close />
             </div>
           )}
+          {correct &&
+            error.type !== 1 &&
+            error.type !== 2 &&
+            logInEmail !== "" && (
+              <div className="inputIcon" onClick={() => closeIcon("email")}>
+                <IconRight />
+              </div>
+            )}
         </div>
         {error.type === 1 && (
           <div className="emailError">올바른 이메일이 아닙니다.</div>
@@ -118,6 +147,11 @@ function LogIn() {
           <div className="passwordError">비밀번호가 일치하지 않습니다.</div>
         )}
       </LoginInputBox>
+      <ForgetPw
+        onClick={() => propsFromPartnersMobile.history.push("/PickNewPwPage")}
+      >
+        비밀번호를 잊으셨나요?
+      </ForgetPw>
       <FooterBox>
         <LoginButton
           button={isLoginBtnActive}
@@ -142,6 +176,7 @@ const LoginInputBox = styled.div`
   div {
     width: 100%;
     position: relative;
+
     input {
       padding: 13px;
       width: 100%;
@@ -150,24 +185,35 @@ const LoginInputBox = styled.div`
       font-size: 16px;
       margin-bottom: 20px;
     }
+
+    .correctEmail {
+      ${({ correct }) => correct && `border-bottom: 1px solid green`}
+    }
+
+    .errorForEmail {
+      ${({ error }) => error.type === 1 && `border-bottom: 1px solid red`}
+      ${({ error }) => error.type === 2 && `border-bottom: 1px solid red`}
+    }
+
     .inputIcon {
       left: 88%;
       top: 5%;
       position: absolute;
     }
-  }
-  .emailError,
-  .passwordError {
-    font-size: 13px;
-    color: #e64a19;
-    left: 2%;
-  }
-  .logInEmail {
-  }
-  .logInPassword {
-    margin-top: 5%;
+    .emailError,
+    .passwordError {
+      font-size: 13px;
+      color: #e64a19;
+      left: 2%;
+    }
+    .logInEmail {
+    }
+    .logInPassword {
+      margin-top: 5%;
+    }
   }
 `;
+
 const FooterBox = styled.div`
   margin-top: 15%;
   display: flex;
@@ -197,7 +243,7 @@ const FooterBox = styled.div`
   }
 `;
 const LoginButton = styled.button`
-  margin-top: 35%;
+  margin-top: 25.4%;
   height: 48px;
   border-radius: 4px;
   font-weight: bold;
@@ -211,4 +257,11 @@ const LoginButton = styled.button`
       : `
       background: #212121;
   `}
+`;
+
+const ForgetPw = styled.div`
+  margin-left: 20px;
+  margin-top: 20px;
+  font-size: 14px;
+  cursor: pointer;
 `;
