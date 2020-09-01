@@ -45,7 +45,6 @@ function LogIn(props) {
     const formData = new FormData();
     formData.append("email", logInEmail);
     formData.append("password", logInPassword);
-
     if (!regEmail.test(logInEmail)) {
       setError({ type: 1 });
     } else {
@@ -126,7 +125,6 @@ function LogIn(props) {
         {error.type === 2 && (
           <div className="emailError">존재하지 않는 계정 입니다.</div>
         )}
-
         <div>
           <input
             value={loginstate.logInPassword}
