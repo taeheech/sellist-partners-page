@@ -14,7 +14,7 @@ class Routes extends Component {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/TermsOfService" component={TermsOfService} />
           <Route exact path="/PrivacyPolicy" component={PrivacyPolicy} />
-          <Route exact path="/ResetPwPage" component={ResetPwPage} />
+          <Route exact path="/ResetPwPage/:token" component={ResetPwPage} />
           <Route exact path="/PickNewPwPage" component={PickNewPwPage} />
         </Switch>
       </Router>
