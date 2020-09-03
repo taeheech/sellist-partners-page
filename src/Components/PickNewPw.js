@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import ArrowBack from "../Images/ArrowBack";
 import Logo from "../Images/Logo";
@@ -8,17 +8,47 @@ import Snackbar from "@material-ui/core/Snackbar";
 function PickNewPw(props) {
   const propsFromPickNewPwPage = props.props;
   const [open, setOpen] = React.useState(false);
-
-  const handleClick = () => {
-    setOpen(true);
-  };
+  const [input, setUserEmail] = useState({ userEmail: "" });
+  const btnActive = !(input.userEmail.length > 0);
+  const [success, setSuccess] = useState(true);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
+  };
+
+  function InputUserEmail(e) {
+    setUserEmail({ userEmail: e.target.value });
+  }
+
+  const handleClick = (e) => {
+    console.log("버튼클릭");
+    const api = "https://api.buzzikid.com/PartnersApi/pswd_reset_request.php";
+    const formData = new FormData();
+    formData.append("email", input.userEmail);
+    fetch(api, {
+      method: "POST",
+      headers: {
+        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+      },
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success === 1) {
+          setOpen(true);
+          setSuccess(true);
+          setTimeout(() => {
+            propsFromPickNewPwPage.history.push("/");
+          }, 2500);
+        }
+        if (res.success === 0) {
+          setOpen(true);
+          setSuccess(false);
+        }
+      });
   };
 
   return (
@@ -46,10 +76,17 @@ function PickNewPw(props) {
         <input
           placeholder="가입하신 이메일을 입력해주세요."
           className="newPassword"
+          onChange={InputUserEmail}
         />
       </InputBox>
       <FooterBox>
-        <ChangeButton onClick={handleClick}>비밀번호 찾기</ChangeButton>
+        <ChangeButton
+          disabled={btnActive}
+          button={btnActive}
+          onClick={handleClick}
+        >
+          비밀번호 찾기
+        </ChangeButton>
         <Snackbar
           className="sc"
           anchorOrigin={{
@@ -59,7 +96,11 @@ function PickNewPw(props) {
           open={open}
           autoHideDuration={2000}
           onClose={handleClose}
-          message="이메일을 확인해 주세요"
+          message={
+            success
+              ? "비밀번호 재설정을 위한 Email이 사용자의 계정으로 전송되었습니다."
+              : "이메일을 확인해 주세요"
+          }
         />
       </FooterBox>
     </Container>
@@ -90,7 +131,7 @@ const TopBar = styled.div`
   display: flex;
   justify-content: flex-end;
 
-  @media screen and (max-width: 1440px) {
+  @media screen and (min-width: 755px) {
     border-radius: 20px;
   }
 
@@ -223,6 +264,7 @@ const ChangeButton = styled.button`
   text-align: center;
   letter-spacing: 0.08em;
   color: #ffffff;
+  ${({ button }) => (button ? `background: #BDBDBD;` : `background: #212121;`)}
 
   @media screen and (max-width: 755px) {
     margin-top: 65%;
