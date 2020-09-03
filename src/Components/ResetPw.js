@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import ArrowBack from "../Images/ArrowBack";
 import Logo from "../Images/Logo";
@@ -6,6 +6,7 @@ import Partners from "../Images/Partners";
 import Snackbar from "@material-ui/core/Snackbar";
 
 function ResetPw(props) {
+  console.log(props);
   const propsFromResetPwPage = props.props;
   const [open, setOpen] = React.useState(false);
 
@@ -17,7 +18,6 @@ function ResetPw(props) {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
