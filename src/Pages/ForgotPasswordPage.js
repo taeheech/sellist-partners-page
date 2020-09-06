@@ -1,20 +1,21 @@
 import React from "react";
 import styled from "styled-components";
+
+import ForgotPassword from "../Components/forgotPassword/ForgotPassword";
+
 import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
-import PickNewPw from "../Components/PickNewPw";
 
-function PickNewpwPage(props) {
+function ForgotPasswordPage(props) {
   return (
     <Container>
       <ImgRight src={Img1} />
       <ImgLeft src={Img2} />
-      <PickNewPw props={props} />
+      <ForgotPassword props={props} />
     </Container>
   );
 }
-
-export default PickNewpwPage;
+export default ForgotPasswordPage;
 
 const Container = styled.section`
   position: relative;
@@ -23,7 +24,6 @@ const Container = styled.section`
   background-color: #3c66ba;
   overflow: hidden;
 `;
-
 const ImgRight = styled.img`
   position: absolute;
   left: 81.24%;
@@ -36,7 +36,6 @@ const ImgRight = styled.img`
     display: none;
   }
 `;
-
 const ImgLeft = styled.img`
   position: absolute;
   left: 50.24%;

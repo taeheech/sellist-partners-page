@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     list-style: none;
-    font-family:"Alliance";
+    font-family: ‘Roboto’, sans-serif;
 }
   input:focus,
   button:focus {
@@ -21,6 +21,9 @@ const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: inherit;
   }
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+</style>
 `;
 
 export default GlobalStyle;

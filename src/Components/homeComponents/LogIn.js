@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import Close from "../Images/Close";
-import IconRight from "../Images/IconRight";
-import Visiblility from "../Images/Visibility";
-import VisibilityOff from "../Images/VisibilityOff";
+import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
+
+import Close from "../../Images/Close";
+import Visiblility from "../../Images/Visibility";
+import VisibilityOff from "../../Images/VisibilityOff";
 
 function LogIn(props) {
   const propsFromPartnersMobile = props.props;
@@ -14,28 +16,24 @@ function LogIn(props) {
   });
   const { logInEmail, logInPassword } = loginstate;
   const isLoginBtnActive = !(logInEmail.length > 0 && logInPassword.length > 0);
+  const emailFilled = logInEmail.length > 0;
+  const pwFilled = logInPassword.length > 0;
+
   const [error, setError] = useState({ type: 0 });
-  const [correct, setCorrect] = useState(false);
   const [pwvisibility, setPwVisibility] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
   function inputLogin(e) {
-    //
     const { name, value } = e.target;
     setLogInState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
 
-    if (logInEmail === "") {
-      setCorrect(false);
+    if (value === "") {
       setError({ type: 0 });
-    }
-
-    if (regEmail.test(logInEmail)) {
-      setCorrect(true);
-    } else {
-      setCorrect(false);
     }
   }
 
@@ -59,16 +57,16 @@ function LogIn(props) {
           return res.json();
         })
         .then((res) => {
-          console.log(res);
           return res;
         })
         .then((res) => {
           if (res.success === 1) {
-            alert("로그인 성공!");
             localStorage.setItem("access_token", res.data.access_token);
-          }
-          if (res.success === 0) {
-            setError({ type: 2 });
+            setOpen(true);
+          } else if (res.error.type === 3) {
+            setError({ type: 3 });
+          } else if (res.error.type === 4) {
+            setError({ type: 4 });
           }
         });
     }
@@ -81,7 +79,6 @@ function LogIn(props) {
         ...prevState,
         logInEmail: "",
       }));
-      setCorrect(false);
     }
   }
 
@@ -91,12 +88,16 @@ function LogIn(props) {
 
   return (
     <>
-      <LoginInputBox correct={correct} error={error}>
+      <LoginInputBox
+        error={error}
+        emailFilled={emailFilled}
+        pwFilled={pwFilled}
+      >
         <div>
           <input
             value={loginstate.logInEmail}
             placeholder="이메일"
-            className="logInEmail correctEmail errorForEmail"
+            className="logInEmail correctEmail errorForEmail typingEmail"
             name="logInEmail"
             onChange={inputLogin}
           />
@@ -110,46 +111,46 @@ function LogIn(props) {
               <Close />
             </div>
           )}
-          {correct &&
-            error.type !== 1 &&
-            error.type !== 2 &&
-            logInEmail !== "" && (
-              <div className="inputIcon" onClick={() => closeIcon("email")}>
-                <IconRight />
-              </div>
-            )}
+          {error.type === 3 && (
+            <div className="inputIcon" onClick={() => closeIcon("email")}>
+              <Close />
+            </div>
+          )}
         </div>
         {error.type === 1 && (
           <div className="emailError">올바른 이메일이 아닙니다.</div>
         )}
-        {error.type === 2 && (
+        {error.type === 3 && (
           <div className="emailError">존재하지 않는 계정 입니다.</div>
         )}
         <div>
           <input
             value={loginstate.logInPassword}
-            type="logInPassword"
             placeholder="비밀번호"
+            className="typingPw errorForPw"
             name="logInPassword"
             onChange={inputLogin}
             type={pwvisibility ? "text" : "password"}
           />
-          {pwvisibility ? (
+          {pwFilled && pwvisibility && (
             <div className="inputIcon" onClick={eyeIcon}>
               <Visiblility />
             </div>
-          ) : (
+          )}
+          {pwFilled && !pwvisibility && (
             <div className="inputIcon" onClick={eyeIcon}>
               <VisibilityOff />
             </div>
           )}
         </div>
-        {error.type === 3 && (
+        {error.type === 4 && (
           <div className="passwordError">비밀번호가 일치하지 않습니다.</div>
         )}
       </LoginInputBox>
       <ForgetPw
-        onClick={() => propsFromPartnersMobile.history.push("/PickNewPwPage")}
+        onClick={() =>
+          propsFromPartnersMobile.history.push("/ForgotPasswordPage")
+        }
       >
         비밀번호를 잊으셨나요?
       </ForgetPw>
@@ -161,6 +162,21 @@ function LogIn(props) {
         >
           로그인
         </LoginButton>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "",
+            horizontal: "center",
+          }}
+          open={open}
+          autoHideDuration={2000}
+        >
+          <SnackbarContent
+            message={`로그인을 환영합니다 !`}
+            style={{
+              backgroundColor: " #E5E5E5",
+            }}
+          />
+        </Snackbar>
       </FooterBox>
     </>
   );
@@ -187,13 +203,22 @@ const LoginInputBox = styled.div`
       margin-bottom: 20px;
     }
 
-    .correctEmail {
-      ${({ correct }) => correct && `border-bottom: 1px solid green`}
-    }
-
     .errorForEmail {
       ${({ error }) => error.type === 1 && `border-bottom: 1px solid red`}
-      ${({ error }) => error.type === 2 && `border-bottom: 1px solid red`}
+      ${({ error }) => error.type === 3 && `border-bottom: 1px solid red`}
+    }
+    .errorForPw {
+      ${({ error }) => error.type === 4 && `border-bottom: 1px solid red`}
+    }
+
+    .typingEmail {
+      ${({ emailFilled, error }) =>
+        emailFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
+    }
+
+    .typingPw {
+      ${({ pwFilled, error }) =>
+        pwFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
     }
 
     .inputIcon {
@@ -201,17 +226,21 @@ const LoginInputBox = styled.div`
       top: 5%;
       position: absolute;
     }
-    .emailError,
-    .passwordError {
-      font-size: 13px;
-      color: #e64a19;
-      left: 2%;
-    }
+
     .logInEmail {
     }
+
     .logInPassword {
       margin-top: 5%;
     }
+  }
+
+  .emailError,
+  .passwordError {
+    top: -16px;
+    font-size: 13px;
+    color: #e64a19;
+    left: 2%;
   }
 `;
 

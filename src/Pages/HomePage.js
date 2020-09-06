@@ -1,15 +1,16 @@
 import React from "react";
 import { useMediaQuery } from "react-responsive";
-import PartnersMobile from "../Components/PartnersMobile";
-import HomeDesktop from "../Components/HomeDesktop";
+
+import HomeMobile from "../Components/homeComponents/HomeMobile";
+import HomeDesktop from "../Components/homeComponents/HomeDesktop";
 
 function HomePage(props) {
-  const isPortrait = useMediaQuery({ query: "(orientation: portrait)" });
+  const isPortrait = useMediaQuery({ query: "min-width:530" });
 
   return (
     <>
       {isPortrait ? (
-        <PartnersMobile props={props} />
+        <HomeMobile props={props} />
       ) : (
         <HomeDesktop props={props} />
       )}
