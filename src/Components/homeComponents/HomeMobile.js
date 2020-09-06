@@ -537,19 +537,19 @@ const InputBox = styled.div`
     ${({ error }) =>
       error.type !== 4 && error.type !== 4.5 && `margin-top: 5%;`}
     ${({ error, emailFilled }) =>
-      error.type === 4 && emailFilled && `margin-top: 0.5%`}
+      error.type === 4 && emailFilled && `margin-top: 0.5%;`}
     ${({ error, emailFilled }) =>
-      error.type === 4.5 && emailFilled && `margin-top: 0.5%`}
+      error.type === 4.5 && emailFilled && `margin-top: 0.5%;`}
   }
 
   .password {
     ${({ error }) => error.type !== 5 && `margin-top: 5%;`}
     ${({ error, nameFilled }) =>
-      error.type === 5 && nameFilled && `margin-top: 0.5%`}
+      error.type === 5 && nameFilled && `margin-top: 0.5%;`}
     
       ${({ error }) => error.type !== 6 && `margin-bottom: 5%;`}
     ${({ error, pwFilled }) =>
-      error.type === 6 && pwFilled && `margin-bottom: 0.5%`}
+      error.type === 6 && pwFilled && `margin-bottom: 0.5%;`}
   }
 `;
 

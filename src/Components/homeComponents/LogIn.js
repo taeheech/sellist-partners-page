@@ -129,7 +129,7 @@ function LogIn(props) {
           <input
             value={loginstate.logInPassword}
             placeholder="비밀번호"
-            className="typingPw errorForPw"
+            className="logInPassword typingPw errorForPw"
             name="logInPassword"
             onChange={inputLogin}
             type={pwvisibility ? "text" : "password"}
@@ -202,7 +202,6 @@ const LoginInputBox = styled.div`
       height: 56px;
       background: white;
       font-size: 16px;
-      margin-bottom: 20px;
     }
 
     .errorForEmail {
@@ -230,10 +229,11 @@ const LoginInputBox = styled.div`
     }
 
     .logInEmail {
+      margin-bottom: 20px;
     }
 
     .logInPassword {
-      margin-top: 5%;
+      margin-bottom: 20px;
     }
   }
 
