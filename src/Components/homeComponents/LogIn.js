@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
+import { logInApi, TOKEN } from "../../Config/urls";
+
 import Close from "../../Images/Close";
 import Visiblility from "../../Images/Visibility";
 import VisibilityOff from "../../Images/VisibilityOff";
@@ -39,17 +41,17 @@ function LogIn(props) {
 
   function btnLogin(e) {
     const { logInEmail, logInPassword } = loginstate;
-    const api = "https://api.buzzikid.com/PartnersApi/member_login.php";
+    // const api = "https://api.buzzikid.com/PartnersApi/member_login.php";
     const formData = new FormData();
     formData.append("email", logInEmail);
     formData.append("password", logInPassword);
     if (!regEmail.test(logInEmail)) {
       setError({ type: 1 });
     } else {
-      fetch(api, {
+      fetch(logInApi, {
         method: "POST",
         headers: {
-          Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+          Authorization: TOKEN,
         },
         body: formData,
       })
