@@ -1,15 +1,73 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Snackbar } from "@material-ui/core";
+
+import ResetPw from "../Components/resetPw/ResetPw";
+
 import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
-import ResetPw from "../Components/ResetPw";
 
 function ResetPwPage(props) {
+  console.log(props.history);
+  const [valid, setvalid] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  let url = props.location.search;
+  let i = url.indexOf("=");
+  let token = url.slice(i + 1, url.length);
+
+  function checkIfTokenValid() {
+    const api = "https://api.buzzikid.com/PartnersApi/validate_reset_token.php";
+    const formData = new FormData();
+    formData.append("token", token);
+    fetch(api, {
+      method: "POST",
+      headers: {
+        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+      },
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success === 1) {
+          console.log("token is valid");
+          setvalid(true);
+        } else {
+          console.log("token is not valid");
+          setvalid(false);
+          setOpen(true);
+          setTimeout(() => {
+            props.history.push("/");
+          }, 2000);
+        }
+      });
+  }
+
+  useEffect(() => {
+    checkIfTokenValid();
+  });
+
+  if (valid) {
+    return (
+      <Container>
+        <ImgRight src={Img1} />
+        <ImgLeft src={Img2} />
+        <ResetPw props={props} token={token} />
+      </Container>
+    );
+  }
   return (
     <Container>
-      <ImgRight src={Img1} />
-      <ImgLeft src={Img2} />
-      <ResetPw props={props} />
+      <SnackbarWraper>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "center",
+            horizontal: "center",
+          }}
+          open={open}
+          message="링크의 유효기간이 만료되었습니다."
+        />
+      </SnackbarWraper>
     </Container>
   );
 }
@@ -50,4 +108,9 @@ const ImgLeft = styled.img`
   @media screen and (max-width: 755px) {
     display: none;
   }
+`;
+
+const SnackbarWraper = styled.div`
+  position: absolute;
+  top: 50%;
 `;

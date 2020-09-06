@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     list-style: none;
-    font-family:"Alliance";
+    font-family: ‘Roboto’, sans-serif;
 }
   input:focus,
   button:focus {
