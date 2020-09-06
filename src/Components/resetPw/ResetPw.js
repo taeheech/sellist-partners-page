@@ -1,30 +1,40 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
+
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
 import Partners from "../../Images/Partners";
-import Snackbar from "@material-ui/core/Snackbar";
 
 function ResetPw(props) {
-  const regPassword = /^[a-z0-9]{8,24}$/;
+  const propsFromResetPwPage = props.props;
+
   const [error, setError] = useState(false);
   const [inputState, setInputState] = useState({
     newPassword: "",
     checkPassword: "",
   });
-  const propsFromResetPwPage = props.props;
   const [open, setOpen] = React.useState(false);
+
+  const regPassword = /^[a-zA-Z0-9!@#$%\^&*)(+=._-]{8,}$/; //영문대소문,숫자,특수문자,최소8자
   const isBtnActive =
     inputState.newPassword.length > 0 && inputState.checkPassword.length > 0;
-  const pwFilled = inputState.newPassword.length > 0;
+  const pwFilled = inputState.newPassword !== "";
   const pwCheckFilled = inputState.checkPassword.length > 0;
+
+  console.log(isBtnActive);
+  console.log(inputState);
 
   function inputHandler(e) {
     const { name, value } = e.target;
-    if (!regPassword.test(value)) {
+
+    if (name === "newPassword" && !regPassword.test(value)) {
       setError(true);
       if (value.length === 0) {
         setError(false);
+        setInputState({ newPassword: "", checkPassword: "" });
       }
     } else {
       setError(false);
@@ -37,18 +47,16 @@ function ResetPw(props) {
 
   function handlebtn(e) {
     const { newPassword, checkPassword } = inputState;
-    console.log("clicked");
     if (regPassword.test(newPassword)) {
     }
     if (newPassword !== checkPassword) {
-      console.log("비밀번호가 일치하지 않습니다.");
+      alert("비밀번호가 일치하지 않습니다.");
     } else if (newPassword === checkPassword) {
       getFetch();
     }
   }
 
   function getFetch() {
-    console.log("fetched");
     const api = "https://api.buzzikid.com/PartnersApi/reset_password.php";
     const formData = new FormData();
     formData.append("password", inputState.newPassword);
@@ -101,7 +109,7 @@ function ResetPw(props) {
           <input
             type="password"
             placeholder="새 비밀번호"
-            className="newPassword"
+            className="newPw errorForPw"
             name="newPassword"
             onChange={inputHandler}
           />
@@ -113,6 +121,7 @@ function ResetPw(props) {
           <input
             type="password"
             placeholder="비밀번호 확인"
+            className="checkNewPw"
             onChange={inputHandler}
             name="checkPassword"
           />
@@ -132,8 +141,14 @@ function ResetPw(props) {
             }}
             open={open}
             autoHideDuration={2000}
-            message="비밀번호가 변경되었습니다."
-          />
+          >
+            <SnackbarContent
+              message="비밀번호가 변경되었습니다."
+              style={{
+                backgroundColor: " #E5E5E5",
+              }}
+            />
+          </Snackbar>
         </FooterBox>
       </Container>
     </Center>
@@ -240,6 +255,7 @@ const InputBox = styled.div`
   flex-direction: column;
   padding-right: 16px;
   padding-left: 16px;
+
   input {
     padding: 13px;
     width: 100%;
@@ -250,21 +266,15 @@ const InputBox = styled.div`
   .errorForPw {
     ${({ error }) => error && `border-bottom: 1px solid red`}
   }
-  .typingPw {
-    ${({ pwFilled, error }) =>
-      pwFilled && !error && `border-bottom: 1px solid #757575`}
-  }
+
   .passwordError {
     top: -16px;
     font-size: 13px;
     color: #e64a19;
     left: 2%;
   }
-  .newPassword {
-    margin-bottom: 5%;
-  }
-  .name {
-    margin-bottom: 5%;
+  .checkNewPw {
+    margin-top: 5%;
   }
 `;
 const InputBoxText = styled.div`
@@ -315,4 +325,5 @@ const ChangeButton = styled.button`
   @media screen and (max-width: 529px) {
     margin-top: 55%;
   }
+  ${({ button }) => (button ? `background: #212121;` : `background: #BDBDBD;`)}
 `;

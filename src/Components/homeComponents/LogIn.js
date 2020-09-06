@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
+
 import Close from "../../Images/Close";
 import Visiblility from "../../Images/Visibility";
 import VisibilityOff from "../../Images/VisibilityOff";
@@ -18,6 +21,8 @@ function LogIn(props) {
 
   const [error, setError] = useState({ type: 0 });
   const [pwvisibility, setPwVisibility] = useState(false);
+  const [open, setOpen] = useState(false);
+
   const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
   function inputLogin(e) {
@@ -52,18 +57,15 @@ function LogIn(props) {
           return res.json();
         })
         .then((res) => {
-          console.log(res);
           return res;
         })
         .then((res) => {
           if (res.success === 1) {
-            alert("로그인 성공!");
             localStorage.setItem("access_token", res.data.access_token);
-          }
-          if (res.error.type === 3) {
+            setOpen(true);
+          } else if (res.error.type === 3) {
             setError({ type: 3 });
-          }
-          if (res.error.type === 4) {
+          } else if (res.error.type === 4) {
             setError({ type: 4 });
           }
         });
@@ -160,6 +162,21 @@ function LogIn(props) {
         >
           로그인
         </LoginButton>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "",
+            horizontal: "center",
+          }}
+          open={open}
+          autoHideDuration={2000}
+        >
+          <SnackbarContent
+            message={`로그인을 환영합니다 !`}
+            style={{
+              backgroundColor: " #E5E5E5",
+            }}
+          />
+        </Snackbar>
       </FooterBox>
     </>
   );

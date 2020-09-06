@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
 
 import ResetPw from "../Components/resetPw/ResetPw";
 
@@ -8,7 +9,6 @@ import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
 
 function ResetPwPage(props) {
-  console.log(props.history);
   const [valid, setvalid] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -30,10 +30,8 @@ function ResetPwPage(props) {
       .then((res) => res.json())
       .then((res) => {
         if (res.success === 1) {
-          console.log("token is valid");
           setvalid(true);
         } else {
-          console.log("token is not valid");
           setvalid(false);
           setOpen(true);
           setTimeout(() => {
@@ -58,16 +56,21 @@ function ResetPwPage(props) {
   }
   return (
     <Container>
-      <SnackbarWraper>
-        <Snackbar
-          anchorOrigin={{
-            vertical: "center",
-            horizontal: "center",
-          }}
-          open={open}
+      <Snackbar
+        anchorOrigin={{
+          vertical: "center",
+          horizontal: "center",
+        }}
+        open={open}
+        message="링크의 유효기간이 만료되었습니다."
+      >
+        <SnackbarContent
           message="링크의 유효기간이 만료되었습니다."
+          style={{
+            backgroundColor: " #E5E5E5",
+          }}
         />
-      </SnackbarWraper>
+      </Snackbar>
     </Container>
   );
 }
@@ -110,7 +113,7 @@ const ImgLeft = styled.img`
   }
 `;
 
-const SnackbarWraper = styled.div`
-  position: absolute;
-  top: 50%;
-`;
+// const SnackbarWraper = styled.div`
+//   position: absolute;
+//   top: 50%;
+// `;

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import LogIn from "./LogIn";
 import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
+
+import LogIn from "./LogIn";
 
 import Logo from "../../Images/Logo";
 import Close from "../../Images/Close";
@@ -308,8 +310,14 @@ function HomeMobile(props) {
                   }}
                   open={open}
                   autoHideDuration={2000}
-                  message={`가입을 환영합니다 ${state.name}`}
-                />
+                >
+                  <SnackbarContent
+                    message={`가입을 환영합니다 ${state.name} !`}
+                    style={{
+                      backgroundColor: " #E5E5E5",
+                    }}
+                  />
+                </Snackbar>
               </FooterBox>
             </>
           ) : (
@@ -481,11 +489,16 @@ const InputBox = styled.div`
         error.type === 6 && pwFilled && `border-bottom: 1px solid red`}
     }
     .typingEmail {
-      ${({ emailFilled }) => emailFilled && `border-bottom: 1px solid #757575`}
+      ${({ emailFilled, error }) =>
+        emailFilled &&
+        error.type !== 4 &&
+        error.type !== 4.5 &&
+        `border-bottom: 1px solid #757575`}
     }
 
     .typingName {
-      ${({ nameFilled }) => nameFilled && `border-bottom: 1px solid #757575`}
+      ${({ nameFilled, error }) =>
+        nameFilled && error.type !== 5 && `border-bottom: 1px solid #757575`}
     }
 
     .typingPw {

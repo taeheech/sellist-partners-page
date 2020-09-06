@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { Snackbar } from "@material-ui/core";
+import { SnackbarContent } from "@material-ui/core";
 
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
 import Partners from "../../Images/Partners";
-import { Snackbar } from "@material-ui/core";
 
 function ForgotPassword(props) {
   const propsFromPage = props.props;
@@ -97,12 +98,18 @@ function ForgotPassword(props) {
             open={open}
             autoHideDuration={2000}
             onClose={handleClose}
-            message={
-              success
-                ? "비밀번호 재설정을 위한 Email이 사용자의 계정으로 전송되었습니다."
-                : "이메일을 확인해 주세요"
-            }
-          />
+          >
+            <SnackbarContent
+              message={
+                success
+                  ? "비밀번호 재설정을 위한 Email이 사용자의 계정으로 전송되었습니다."
+                  : "이메일을 확인해 주세요"
+              }
+              style={{
+                backgroundColor: " #E5E5E5",
+              }}
+            />
+          </Snackbar>
         </FooterBox>
       </Container>
     </Center>
