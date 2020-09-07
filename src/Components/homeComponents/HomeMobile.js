@@ -4,6 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import LogIn from "./LogIn";
+import { registerApi, TOKEN } from "../../Config/urls";
 
 import Logo from "../../Images/Logo";
 import Close from "../../Images/Close";
@@ -19,6 +20,9 @@ function HomeMobile(props) {
   const [state, setState] = useState({ email: "", name: "", password: "" });
   const [error, setError] = useState({ type: 0 });
   const [open, setOpen] = useState(false);
+
+  console.log(state);
+  console.log(error);
 
   const emailFilled = state.email.length > 0;
   const nameFilled = state.name.length > 0;
@@ -44,6 +48,9 @@ function HomeMobile(props) {
       ...prevState,
       [name]: value,
     }));
+    if (value === "") {
+      setError({ type: 0 });
+    }
   }
 
   function inputName(e) {
@@ -57,6 +64,9 @@ function HomeMobile(props) {
       ...prevState,
       [name]: value,
     }));
+    if (value === "") {
+      setError({ type: 0 });
+    }
   }
 
   function inputPw(e) {
@@ -70,6 +80,9 @@ function HomeMobile(props) {
       ...prevState,
       [name]: value,
     }));
+    if (value === "") {
+      setError({ type: 0 });
+    }
   }
 
   function btnRegister(e) {
@@ -95,15 +108,15 @@ function HomeMobile(props) {
 
   function getFetch() {
     const { email, name, password } = state;
-    const api = "https://api.buzzikid.com/PartnersApi/member_register.php";
+    // const api = "https://api.buzzikid.com/PartnersApi/member_register.php";
     const formData = new FormData();
     formData.append("email", email);
     formData.append("name", name);
     formData.append("password", password);
-    fetch(api, {
+    fetch(registerApi, {
       method: "post",
       headers: {
-        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+        Authorization: TOKEN,
       },
       body: formData,
     })
@@ -275,7 +288,7 @@ function HomeMobile(props) {
                   </div>
                 )}
               </InputBox>
-              <FooterBox>
+              <FooterBox error={error} pwFilled={pwFilled}>
                 <p>
                   계속 버튼을 클릭하면 서비스 이용약관 및 개인 정보 정책에 동의
                   하는 것으로 간주됩니다.
@@ -521,16 +534,27 @@ const InputBox = styled.div`
   }
 
   .name {
-    margin-top: 5%;
+    ${({ error }) =>
+      error.type !== 4 && error.type !== 4.5 && `margin-top: 5%;`}
+    ${({ error, emailFilled }) =>
+      error.type === 4 && emailFilled && `margin-top: 0.5%;`}
+    ${({ error, emailFilled }) =>
+      error.type === 4.5 && emailFilled && `margin-top: 0.5%;`}
   }
 
   .password {
-    margin-top: 5%;
+    ${({ error }) => error.type !== 5 && `margin-top: 5%;`}
+    ${({ error, nameFilled }) =>
+      error.type === 5 && nameFilled && `margin-top: 0.5%;`}
+    
+      ${({ error }) => error.type !== 6 && `margin-bottom: 5%;`}
+    ${({ error, pwFilled }) =>
+      error.type === 6 && pwFilled && `margin-bottom: 0.5%;`}
   }
 `;
 
 const FooterBox = styled.div`
-  margin-top: 35px;
+  margin-top: 5%;
   display: flex;
   flex-direction: column;
   padding-right: 16px;

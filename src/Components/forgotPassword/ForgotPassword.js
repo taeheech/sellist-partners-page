@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
+import { forgotPwApi, TOKEN } from "../../Config/urls";
+
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
 import Partners from "../../Images/Partners";
@@ -26,14 +28,14 @@ function ForgotPassword(props) {
   }
 
   const handleClick = (e) => {
-    console.log("버튼클릭");
-    const api = "https://api.buzzikid.com/PartnersApi/pswd_reset_request.php";
+    console.log("클릭");
+    // const api = "https://api.buzzikid.com/PartnersApi/pswd_reset_request.php";
     const formData = new FormData();
     formData.append("email", input.userEmail);
-    fetch(api, {
+    fetch(forgotPwApi, {
       method: "POST",
       headers: {
-        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+        Authorization: TOKEN,
       },
       body: formData,
     })
@@ -186,10 +188,6 @@ const TopBox = styled.div`
   @media screen and (min-width: 530px) {
     display: none;
   }
-`;
-const Text = styled.p`
-  margin-left: 24px;
-  color: #757575;
 `;
 const LogoWrapper = styled.div`
   margin-left: 130px;

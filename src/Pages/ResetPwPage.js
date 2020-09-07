@@ -4,6 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import ResetPw from "../Components/resetPw/ResetPw";
+import { tokenApi, TOKEN } from "../Config/urls";
 
 import Img1 from "../Images/MaskGroup.png";
 import Img2 from "../Images/MaskGroup2.png";
@@ -17,13 +18,13 @@ function ResetPwPage(props) {
   let token = url.slice(i + 1, url.length);
 
   function checkIfTokenValid() {
-    const api = "https://api.buzzikid.com/PartnersApi/validate_reset_token.php";
+    // const api = "https://api.buzzikid.com/PartnersApi/validate_reset_token.php";
     const formData = new FormData();
     formData.append("token", token);
-    fetch(api, {
+    fetch(tokenApi, {
       method: "POST",
       headers: {
-        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+        Authorization: TOKEN,
       },
       body: formData,
     })

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
 import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
+
+import { resetPwApi, TOKEN } from "../../Config/urls";
 
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
@@ -23,9 +24,6 @@ function ResetPw(props) {
     inputState.newPassword.length > 0 && inputState.checkPassword.length > 0;
   const pwFilled = inputState.newPassword !== "";
   const pwCheckFilled = inputState.checkPassword.length > 0;
-
-  console.log(isBtnActive);
-  console.log(inputState);
 
   function inputHandler(e) {
     const { name, value } = e.target;
@@ -57,14 +55,14 @@ function ResetPw(props) {
   }
 
   function getFetch() {
-    const api = "https://api.buzzikid.com/PartnersApi/reset_password.php";
+    // const api = "https://api.buzzikid.com/PartnersApi/reset_password.php";
     const formData = new FormData();
     formData.append("password", inputState.newPassword);
     formData.append("token", props.token);
-    fetch(api, {
+    fetch(resetPwApi, {
       method: "post",
       headers: {
-        Authorization: "6cz2w6BC9mgpAhKNmmgcSnpEnJX9w34mF3dzzMyAqzBYkBTfEE",
+        Authorization: TOKEN,
       },
       body: formData,
     })
