@@ -63,12 +63,13 @@ function LogIn(props) {
         })
         .then((res) => {
           if (res.success === 1) {
+            //로그인성공
             localStorage.setItem("access_token", res.data.access_token);
-            setOpen(true);
+            setOpen(true); //snackbar
           } else if (res.error.type === 3) {
-            setError({ type: 3 });
+            setError({ type: 3 }); //계정존재 XX
           } else if (res.error.type === 4) {
-            setError({ type: 4 });
+            setError({ type: 4 }); //비밀번호 일치 X
           }
         });
     }
@@ -95,26 +96,21 @@ function LogIn(props) {
         emailFilled={emailFilled}
         pwFilled={pwFilled}
       >
-        <div>
+        <div className="emailBox logInEmail ">
           <input
             value={loginstate.logInEmail}
             placeholder="이메일"
-            className="logInEmail correctEmail errorForEmail typingEmail"
+            className="correctEmail errorForEmail typingEmail"
             name="logInEmail"
             onChange={inputLogin}
           />
           {error.type === 1 && (
-            <div className="inputIcon" onClick={() => closeIcon("email")}>
-              <Close />
-            </div>
-          )}
-          {error.type === 2 && (
-            <div className="inputIcon" onClick={() => closeIcon("email")}>
+            <div className="closeIcon" onClick={() => closeIcon("email")}>
               <Close />
             </div>
           )}
           {error.type === 3 && (
-            <div className="inputIcon" onClick={() => closeIcon("email")}>
+            <div className="closeIcon" onClick={() => closeIcon("email")}>
               <Close />
             </div>
           )}
@@ -125,22 +121,22 @@ function LogIn(props) {
         {error.type === 3 && (
           <div className="emailError">존재하지 않는 계정 입니다.</div>
         )}
-        <div>
+        <div className="pwBox logInPassword ">
           <input
             value={loginstate.logInPassword}
             placeholder="비밀번호"
-            className="logInPassword typingPw errorForPw"
+            className="typingPw errorForPw"
             name="logInPassword"
             onChange={inputLogin}
             type={pwvisibility ? "text" : "password"}
           />
           {pwFilled && pwvisibility && (
-            <div className="inputIcon" onClick={eyeIcon}>
+            <div className="eyeIcon" onClick={eyeIcon}>
               <Visiblility />
             </div>
           )}
           {pwFilled && !pwvisibility && (
-            <div className="inputIcon" onClick={eyeIcon}>
+            <div className="eyeIcon" onClick={eyeIcon}>
               <VisibilityOff />
             </div>
           )}
@@ -192,10 +188,10 @@ const LoginInputBox = styled.div`
   padding-right: 16px;
   padding-left: 16px;
 
-  div {
+  .emailBox {
     width: 100%;
     position: relative;
-
+    
     input {
       padding: 13px;
       width: 100%;
@@ -203,43 +199,62 @@ const LoginInputBox = styled.div`
       background: white;
       font-size: 16px;
     }
-
     .errorForEmail {
       ${({ error }) => error.type === 1 && `border-bottom: 1px solid red`}
       ${({ error }) => error.type === 3 && `border-bottom: 1px solid red`}
     }
-    .errorForPw {
-      ${({ error }) => error.type === 4 && `border-bottom: 1px solid red`}
-    }
-
     .typingEmail {
       ${({ emailFilled, error }) =>
         emailFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
     }
-
-    .typingPw {
-      ${({ pwFilled, error }) =>
-        pwFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
-    }
-
-    .inputIcon {
+    .closeIcon {
       left: 88%;
       top: 5%;
       position: absolute;
     }
 
-    .logInEmail {
-      margin-bottom: 20px;
+  }
+  .pwBox{
+    width: 100%;
+    height: 56px;
+    position: relative;
+    
+    input {
+      padding: 13px;
+      width: 100%;
+      height: 56px;
+      background: white;
+      font-size: 16px;
+    }
+    .errorForPw {
+      ${({ error }) => error.type === 4 && `border-bottom: 1px solid red`}
+    }
+    .typingPw {
+      ${({ pwFilled, error }) =>
+        pwFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
     }
 
-    .logInPassword {
-      margin-bottom: 20px;
+    .eyeIcon {
+      left: 88%;
+      top: 6%;
+      position: absolute;
     }
+  }
+  .logInPassword {
+    ${({ error }) => error.type !== 1 && error.type !== 3 && `margin-top: 5%;`}
+    ${({ error, emailFilled }) =>
+      error.type === 1 && emailFilled && `margin-top: 0.5%;`}
+    ${({ error, emailFilled }) =>
+      error.type === 3 && emailFilled && `margin-top: 0.5%;`}
+
+    ${({ error }) => error.type !== 4 && `margin-bottom: 5%;`}
+    ${({ error, pwFilled }) =>
+      error.type === 4 && pwFilled && `margin-bottom: 0.5%;`}
   }
 
   .emailError,
   .passwordError {
-    top: -16px;
+    // top: -16px;
     font-size: 13px;
     color: #e64a19;
     left: 2%;
