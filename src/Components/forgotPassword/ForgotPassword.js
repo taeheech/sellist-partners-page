@@ -4,6 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import { forgotPwApi, TOKEN } from "../../Config/urls";
+import { center, container, topbar } from "../../Config/commonStyles";
 
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
@@ -29,7 +30,7 @@ function ForgotPassword(props) {
 
   const handleClick = (e) => {
     console.log("클릭");
-    // const api = "https://api.buzzikid.com/PartnersApi/pswd_reset_request.php";
+    console.log(input.userEmail);
     const formData = new FormData();
     formData.append("email", input.userEmail);
     fetch(forgotPwApi, {
@@ -46,7 +47,7 @@ function ForgotPassword(props) {
           setSuccess(true);
           setTimeout(() => {
             propsFromPage.history.push("/");
-          }, 2500);
+          }, 3000);
         }
         if (res.success === 0) {
           setOpen(true);
@@ -98,7 +99,7 @@ function ForgotPassword(props) {
               horizontal: "center",
             }}
             open={open}
-            autoHideDuration={2000}
+            autoHideDuration={3000}
             onClose={handleClose}
           >
             <SnackbarContent
@@ -108,7 +109,7 @@ function ForgotPassword(props) {
                   : "이메일을 확인해 주세요"
               }
               style={{
-                backgroundColor: " #E5E5E5",
+                backgroundColor: "##757575",
               }}
             />
           </Snackbar>
@@ -119,68 +120,12 @@ function ForgotPassword(props) {
 }
 export default ForgotPassword;
 
-const Center = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-const Container = styled.div`
-  background: #f2f6ff;
-  width: 100vw;
-  height: 100vh;
-  @media screen and (min-width: 530px) {
-    width: 420px;
-    height: 660px;
-    background: #f2f6ff;
-    border-radius: 16px;
-    margin-left: 12vw;
-  }
-`;
-const TopBar = styled.div`
-  padding-top: 7px;
-  padding-right: 7px;
-  height: 24px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: flex-end;
-  @media screen and (min-width: 530px) {
-    border-radius: 20px;
-    background: #f2f6ff;
-    padding-top: 7px;
-    padding-right: 7px;
-    height: 24px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 53px;
-    @media screen and (min-width: 530px) {
-      display: none;
-    }
-    .rectangle {
-      width: 10px;
-      height: 10px;
-      background: #212121;
-    }
-    .circle {
-      width: 10px;
-      height: 10px;
-      background: #212121;
-      border-radius: 100px;
-    }
-    .triangle {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 10px solid black;
-    }
-  }
-`;
+const Center = center;
+
+const Container = container;
+
+const TopBar = topbar;
+
 const TopBox = styled.div`
   display: flex;
   height: 56px;
@@ -232,6 +177,7 @@ const InputBoxText = styled.div`
   line-height: 25px;
   margin-left: 10px;
 `;
+
 const FooterBox = styled.div`
   margin-top: 15%;
   display: flex;
@@ -261,6 +207,7 @@ const FooterBox = styled.div`
     justify-content: center;
   }
 `;
+
 const ChangeButton = styled.button`
   margin-top: 50%;
   height: 48px;

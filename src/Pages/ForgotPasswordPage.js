@@ -42,10 +42,8 @@ const ImgLeft = styled.img`
   top: 30%;
   bottom: 0.09%;
   transform: rotate(20deg);
-  width: 20%;
   border-radius: 20px;
   opacity: 0.4;
-  box-shadow: -30px -8px #384bc7;
   @media screen and (max-width: 755px) {
     display: none;
   }

@@ -4,13 +4,14 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import { logInApi, TOKEN } from "../../Config/urls";
+import { footerBox } from "../../Config/commonStyles";
 
 import Close from "../../Images/Close";
 import Visiblility from "../../Images/Visibility";
 import VisibilityOff from "../../Images/VisibilityOff";
 
 function LogIn(props) {
-  const propsFromPartnersMobile = props.props;
+  const propsFromHome = props.props;
 
   const [loginstate, setLogInState] = useState({
     logInEmail: "",
@@ -21,7 +22,10 @@ function LogIn(props) {
   const emailFilled = logInEmail.length > 0;
   const pwFilled = logInPassword.length > 0;
 
-  const [error, setError] = useState({ type: 0 });
+  const [error1, setError1] = useState(false); //올바른 이메일이 아닙니다.
+  const [error2, setError2] = useState(false); //계정존재 XX
+  const [error3, setError3] = useState(false); //비밀번호 일치 X
+
   const [pwvisibility, setPwVisibility] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -35,18 +39,19 @@ function LogIn(props) {
     }));
 
     if (value === "") {
-      setError({ type: 0 });
+      setError1(false);
+      setError2(false);
+      setError3(false);
     }
   }
 
   function btnLogin(e) {
     const { logInEmail, logInPassword } = loginstate;
-    // const api = "https://api.buzzikid.com/PartnersApi/member_login.php";
     const formData = new FormData();
     formData.append("email", logInEmail);
     formData.append("password", logInPassword);
     if (!regEmail.test(logInEmail)) {
-      setError({ type: 1 });
+      setError1(true);
     } else {
       fetch(logInApi, {
         method: "POST",
@@ -67,21 +72,22 @@ function LogIn(props) {
             localStorage.setItem("access_token", res.data.access_token);
             setOpen(true); //snackbar
           } else if (res.error.type === 3) {
-            setError({ type: 3 }); //계정존재 XX
+            setError2(true); //계정존재 XX
           } else if (res.error.type === 4) {
-            setError({ type: 4 }); //비밀번호 일치 X
+            setError3(true); //비밀번호 일치 X
           }
         });
     }
   }
 
   function closeIcon(param) {
-    setError({ type: 0 });
     if (param === "email") {
       setLogInState((prevState) => ({
         ...prevState,
         logInEmail: "",
       }));
+      setError1(false);
+      setError2(false);
     }
   }
 
@@ -92,7 +98,9 @@ function LogIn(props) {
   return (
     <>
       <LoginInputBox
-        error={error}
+        error1={error1}
+        error2={error2}
+        error3={error3}
         emailFilled={emailFilled}
         pwFilled={pwFilled}
       >
@@ -104,23 +112,19 @@ function LogIn(props) {
             name="logInEmail"
             onChange={inputLogin}
           />
-          {error.type === 1 && (
+          {error1 && (
             <div className="closeIcon" onClick={() => closeIcon("email")}>
               <Close />
             </div>
           )}
-          {error.type === 3 && (
+          {error2 && (
             <div className="closeIcon" onClick={() => closeIcon("email")}>
               <Close />
             </div>
           )}
         </div>
-        {error.type === 1 && (
-          <div className="emailError">올바른 이메일이 아닙니다.</div>
-        )}
-        {error.type === 3 && (
-          <div className="emailError">존재하지 않는 계정 입니다.</div>
-        )}
+        {error1 && <div className="emailError">올바른 이메일이 아닙니다.</div>}
+        {error2 && <div className="emailError">존재하지 않는 계정 입니다.</div>}
         <div className="pwBox logInPassword ">
           <input
             value={loginstate.logInPassword}
@@ -141,14 +145,12 @@ function LogIn(props) {
             </div>
           )}
         </div>
-        {error.type === 4 && (
+        {error3 && (
           <div className="passwordError">비밀번호가 일치하지 않습니다.</div>
         )}
       </LoginInputBox>
       <ForgetPw
-        onClick={() =>
-          propsFromPartnersMobile.history.push("/ForgotPasswordPage")
-        }
+        onClick={() => propsFromHome.history.push("/ForgotPasswordPage")}
       >
         비밀번호를 잊으셨나요?
       </ForgetPw>
@@ -166,12 +168,12 @@ function LogIn(props) {
             horizontal: "center",
           }}
           open={open}
-          autoHideDuration={2000}
+          autoHideDuration={3000}
         >
           <SnackbarContent
             message={`로그인을 환영합니다 !`}
             style={{
-              backgroundColor: " #E5E5E5",
+              backgroundColor: "#757575",
             }}
           />
         </Snackbar>
@@ -200,12 +202,12 @@ const LoginInputBox = styled.div`
       font-size: 16px;
     }
     .errorForEmail {
-      ${({ error }) => error.type === 1 && `border-bottom: 1px solid red`}
-      ${({ error }) => error.type === 3 && `border-bottom: 1px solid red`}
+      ${({ error1 }) => error1 && `border-bottom: 1px solid red`}
+      ${({ error2 }) => error2 && `border-bottom: 1px solid red`}
     }
     .typingEmail {
-      ${({ emailFilled, error }) =>
-        emailFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
+      ${({ emailFilled, error1, error2 }) =>
+        emailFilled && !error1 && !error2 && `border-bottom: 1px solid #757575`}
     }
     .closeIcon {
       left: 88%;
@@ -227,11 +229,11 @@ const LoginInputBox = styled.div`
       font-size: 16px;
     }
     .errorForPw {
-      ${({ error }) => error.type === 4 && `border-bottom: 1px solid red`}
+      ${({ error3 }) => error3 && `border-bottom: 1px solid red`}
     }
     .typingPw {
-      ${({ pwFilled, error }) =>
-        pwFilled && error.type === 0 && `border-bottom: 1px solid #757575`}
+      ${({ pwFilled, error3 }) =>
+        pwFilled && !error3 && `border-bottom: 1px solid #757575`}
     }
 
     .eyeIcon {
@@ -241,15 +243,12 @@ const LoginInputBox = styled.div`
     }
   }
   .logInPassword {
-    ${({ error }) => error.type !== 1 && error.type !== 3 && `margin-top: 5%;`}
-    ${({ error, emailFilled }) =>
-      error.type === 1 && emailFilled && `margin-top: 0.5%;`}
-    ${({ error, emailFilled }) =>
-      error.type === 3 && emailFilled && `margin-top: 0.5%;`}
+    ${({ error1, error2 }) => !error1 && !error2 && `margin-top: 5%;`}
+    ${({ error1, emailFilled }) => error1 && emailFilled && `margin-top: 0.5%;`}
+    ${({ error2, emailFilled }) => error2 && emailFilled && `margin-top: 0.5%;`}
 
-    ${({ error }) => error.type !== 4 && `margin-bottom: 5%;`}
-    ${({ error, pwFilled }) =>
-      error.type === 4 && pwFilled && `margin-bottom: 0.5%;`}
+    ${({ error3 }) => !error3 && `margin-bottom: 5%;`}
+    ${({ error3, pwFilled }) => error3 && pwFilled && `margin-bottom: 0.5%;`}
   }
 
   .emailError,
@@ -261,34 +260,8 @@ const LoginInputBox = styled.div`
   }
 `;
 
-const FooterBox = styled.div`
-  margin-top: 15%;
-  display: flex;
-  flex-direction: column;
-  padding-right: 16px;
-  padding-left: 16px;
-  p {
-    height: 18px;
-    font-size: 14px;
-    text-align: center;
-    color: #424242;
-  }
-  .terms {
-    margin-top: 5%;
-    display: flex;
-    justify-content: space-evenly;
-    font-weight: bold;
-    font-size: 12px;
-    line-height: 14px;
-    letter-spacing: 0.08em;
-  }
-  div {
-    font-size: 12px;
-    line-height: 14px;
-    font-weight: bold;
-    color: #212121;
-  }
-`;
+const FooterBox = footerBox;
+
 const LoginButton = styled.button`
   margin-top: 25.4%;
   height: 48px;
