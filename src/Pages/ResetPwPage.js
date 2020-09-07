@@ -18,7 +18,6 @@ function ResetPwPage(props) {
   let token = url.slice(i + 1, url.length);
 
   function checkIfTokenValid() {
-    // const api = "https://api.buzzikid.com/PartnersApi/validate_reset_token.php";
     const formData = new FormData();
     formData.append("token", token);
     fetch(tokenApi, {
@@ -37,7 +36,7 @@ function ResetPwPage(props) {
           setOpen(true);
           setTimeout(() => {
             props.history.push("/");
-          }, 2000);
+          }, 3500);
         }
       });
   }
@@ -63,12 +62,11 @@ function ResetPwPage(props) {
           horizontal: "center",
         }}
         open={open}
-        message="링크의 유효기간이 만료되었습니다."
       >
         <SnackbarContent
           message="링크의 유효기간이 만료되었습니다."
           style={{
-            backgroundColor: " #E5E5E5",
+            backgroundColor: "#757575",
           }}
         />
       </Snackbar>
@@ -105,16 +103,9 @@ const ImgLeft = styled.img`
   top: 30%;
   bottom: 0.09%;
   transform: rotate(20deg);
-  width: 20%;
   border-radius: 20px;
   opacity: 0.4;
-  box-shadow: -30px -8px #384bc7;
   @media screen and (max-width: 755px) {
     display: none;
   }
 `;
-
-// const SnackbarWraper = styled.div`
-//   position: absolute;
-//   top: 50%;
-// `;

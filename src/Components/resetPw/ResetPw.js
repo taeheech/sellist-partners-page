@@ -4,6 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import { resetPwApi, TOKEN } from "../../Config/urls";
+import { center, container, topbar } from "../../Config/commonStyles";
 
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
@@ -17,7 +18,7 @@ function ResetPw(props) {
     newPassword: "",
     checkPassword: "",
   });
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const regPassword = /^[a-zA-Z0-9!@#$%\^&*)(+=._-]{8,}$/; //영문대소문,숫자,특수문자,최소8자
   const isBtnActive =
@@ -55,7 +56,6 @@ function ResetPw(props) {
   }
 
   function getFetch() {
-    // const api = "https://api.buzzikid.com/PartnersApi/reset_password.php";
     const formData = new FormData();
     formData.append("password", inputState.newPassword);
     formData.append("token", props.token);
@@ -72,7 +72,7 @@ function ResetPw(props) {
           setOpen(true);
           setTimeout(() => {
             propsFromResetPwPage.history.push("/");
-          }, 2000);
+          }, 3000);
         }
       });
   }
@@ -138,12 +138,12 @@ function ResetPw(props) {
               horizontal: "center",
             }}
             open={open}
-            autoHideDuration={2000}
+            autoHideDuration={3000}
           >
             <SnackbarContent
               message="비밀번호가 변경되었습니다."
               style={{
-                backgroundColor: " #E5E5E5",
+                backgroundColor: "#757575",
               }}
             />
           </Snackbar>
@@ -154,74 +154,12 @@ function ResetPw(props) {
 }
 export default ResetPw;
 
-const Center = styled.div`
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-`;
-const Container = styled.div`
-  background: #f2f6ff;
-  width: 100vw;
-  height: 100vh;
-  @media screen and (min-width: 530px) {
-    width: 420px;
-    height: 660px;
-    background: #f2f6ff;
-    border-radius: 16px;
-    margin-left: 12vw;
-  }
-`;
-const TopBar = styled.div`
-  padding-top: 7px;
-  padding-right: 7px;
-  height: 24px;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: flex-end;
+const Center = center;
 
-  @media screen and (min-width: 530px) {
-    border-radius: 20px;
-    padding-top: 7px;
-    padding-right: 7px;
-    height: 24px;
-    background: #f2f6ff;
-    display: flex;
-    justify-content: flex-end;
-  }
+const Container = container;
 
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 53px;
+const TopBar = topbar;
 
-    @media screen and (min-width: 530px) {
-      display: none;
-    }
-
-    .rectangle {
-      width: 10px;
-      height: 10px;
-      background: #212121;
-    }
-
-    .circle {
-      width: 10px;
-      height: 10px;
-      background: #212121;
-      border-radius: 100px;
-    }
-
-    .triangle {
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-top: 10px solid black;
-    }
-  }
-`;
 const TopBox = styled.div`
   display: flex;
   height: 56px;
