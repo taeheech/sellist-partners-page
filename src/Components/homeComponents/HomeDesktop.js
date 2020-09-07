@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import PartnersMobile from "../Components/PartnersMobile";
-import Img1 from "../Images/MaskGroup.png";
-import Img2 from "../Images/MaskGroup2.png";
+
+import HomeMobile from "./HomeMobile";
+
+import Img1 from "../../Images/MaskGroup.png";
+import Img2 from "../../Images/MaskGroup2.png";
 
 function HomeDesktop(props) {
   const propsFromHomePage = props.props;
@@ -11,8 +13,7 @@ function HomeDesktop(props) {
     <Container>
       <ImgRight src={Img1} />
       <ImgLeft src={Img2} />
-      <PartnersMobile props={propsFromHomePage} />
-      {/* <ResetPsw /> */}
+      <HomeMobile props={propsFromHomePage} />
     </Container>
   );
 }
