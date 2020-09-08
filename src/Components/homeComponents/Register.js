@@ -248,7 +248,7 @@ function Register(props, { setActiveTab }) {
           autoHideDuration={3000}
         >
           <SnackbarContent
-            message={`가입을 환영합니다 ${state.name} !`}
+            message={`${state.name} 님, 가입을 환영합니다 !`}
             style={{
               backgroundColor: "#757575",
             }}

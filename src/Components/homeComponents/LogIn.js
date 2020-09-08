@@ -173,7 +173,7 @@ function LogIn(props) {
           autoHideDuration={3000}
         >
           <SnackbarContent
-            message={`${userName}님, 로그인을 환영합니다!`}
+            message={`${userName} 님, 로그인을 환영합니다!`}
             style={{
               backgroundColor: "#757575",
             }}
