@@ -4,11 +4,11 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import { resetPwApi, TOKEN } from "../../Config/urls";
-import { center, container, topbar } from "../../Config/commonStyles";
+import { center, container, topbar, header } from "../../Config/commonStyles";
 
-import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
 import Partners from "../../Images/Partners";
+import ArrowBack from "../../Images/ArrowBack";
 
 function ResetPw(props) {
   const propsFromResetPwPage = props.props;
@@ -92,12 +92,22 @@ function ResetPw(props) {
             <ArrowBack />
           </div>
         </TopBox>
-        <LogoWrapper>
+        {/* <LogoWrapper>
           <Logo />
         </LogoWrapper>
         <PartnersWrapper>
           <Partners />
-        </PartnersWrapper>
+        </PartnersWrapper> */}
+        <Header>
+          <div>
+            <div className="logo">
+              <Logo />
+            </div>
+            <div className="partners">
+              <Partners />
+            </div>
+          </div>
+        </Header>
         <InputBox
           error={error}
           pwFilled={pwFilled}
@@ -169,22 +179,9 @@ const TopBox = styled.div`
     display: none;
   }
 `;
-const LogoWrapper = styled.div`
-  margin-left: 130px;
-  margin-top: 40px;
-  @media screen and (max-width: 529px) {
-    display: none;
-  }
-`;
-const PartnersWrapper = styled.div`
-  width: 67px;
-  height: 23px;
-  margin-left: 130px;
-  margin-bottom: 60px;
-  @media screen and (max-width: 529px) {
-    display: none;
-  }
-`;
+
+const Header = header;
+
 const InputBox = styled.div`
   margin-top: 10%;
   display: flex;

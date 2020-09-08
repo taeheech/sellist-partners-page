@@ -48,8 +48,8 @@ function ResetPwPage(props) {
   if (valid) {
     return (
       <Container>
-        <ImgRight src={Img1} />
-        <ImgLeft src={Img2} />
+        <ImgRight src={Img2} />
+        <ImgLeft src={Img1} />
         <ResetPw props={props} token={token} />
       </Container>
     );

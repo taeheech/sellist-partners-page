@@ -67,6 +67,33 @@ export const topbar = styled.div`
   }
 `;
 
+export const header = styled.div`
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  div {
+    position: relative;
+    width: 154px;
+    height: 58px;
+
+    .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    .partners {
+      width: 67px;
+      height: 23px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+  }
+`;
+
 export const footerBox = styled.div`
   margin-top: 5%;
   display: flex;

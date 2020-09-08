@@ -4,7 +4,7 @@ import { Snackbar } from "@material-ui/core";
 import { SnackbarContent } from "@material-ui/core";
 
 import { forgotPwApi, TOKEN } from "../../Config/urls";
-import { center, container, topbar } from "../../Config/commonStyles";
+import { center, container, topbar, header } from "../../Config/commonStyles";
 
 import ArrowBack from "../../Images/ArrowBack";
 import Logo from "../../Images/Logo";
@@ -29,8 +29,6 @@ function ForgotPassword(props) {
   }
 
   const handleClick = (e) => {
-    console.log("클릭");
-    console.log(input.userEmail);
     const formData = new FormData();
     formData.append("email", input.userEmail);
     fetch(forgotPwApi, {
@@ -71,12 +69,16 @@ function ForgotPassword(props) {
             <ArrowBack />
           </div>
         </TopBox>
-        <LogoWrapper>
-          <Logo />
-        </LogoWrapper>
-        <PartnersWrapper>
-          <Partners />
-        </PartnersWrapper>
+        <Header>
+          <div>
+            <div className="logo">
+              <Logo />
+            </div>
+            <div className="partners">
+              <Partners />
+            </div>
+          </div>
+        </Header>
         <InputBox>
           <InputBoxText>비밀번호 찾기</InputBoxText>
           <input
@@ -109,7 +111,7 @@ function ForgotPassword(props) {
                   : "이메일을 확인해 주세요"
               }
               style={{
-                backgroundColor: "##757575",
+                backgroundColor: "#757575",
               }}
             />
           </Snackbar>
@@ -134,22 +136,9 @@ const TopBox = styled.div`
     display: none;
   }
 `;
-const LogoWrapper = styled.div`
-  margin-left: 130px;
-  margin-top: 40px;
-  @media screen and (max-width: 530px) {
-    display: none;
-  }
-`;
-const PartnersWrapper = styled.div`
-  width: 67px;
-  height: 23px;
-  margin-left: 130px;
-  margin-bottom: 60px;
-  @media screen and (max-width: 530px) {
-    display: none;
-  }
-`;
+
+const Header = header;
+
 const InputBox = styled.div`
   margin-top: 10%;
   display: flex;

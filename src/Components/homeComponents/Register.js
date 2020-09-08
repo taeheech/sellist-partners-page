@@ -12,18 +12,17 @@ import VisibilityOff from "../../Images/VisibilityOff";
 function Register(props, { setActiveTab }) {
   const propsFromHomeDesktop = props.props;
 
-  const [pwvisibility, setPwVisibility] = useState(false);
+  const [pwvisibility, setPwVisibility] = useState(false); //eyeIcon 클릭시 password input type을 password또는text로 바꿔줍니다
   const [state, setState] = useState({ email: "", name: "", password: "" });
   const [error1, setError1] = useState(false); //이미 사용 중인 이메일 입니다. 다시 시도해 주세요. -email
   const [error2, setError2] = useState(false); //사용할 수 없는 이메일 형식입니다. -email
   const [error3, setError3] = useState(false); //숫자나 특수문자( . 제외)는 포함될 수 없습니다. -name
   const [error4, setError4] = useState(false); //비밀번호는 최소 8자 이상이어야 합니다. -pw
-
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); //open === true 일때 snackbar가 열립니다
 
   const emailFilled = state.email.length > 0;
   const nameFilled = state.name.length > 0;
-  const pwFilled = state.password.length >= 6;
+  const pwFilled = state.password.length > 0;
   const isRegisterBtnActive = !(
     state.name.length > 0 &&
     state.email.length > 0 &&
@@ -31,58 +30,25 @@ function Register(props, { setActiveTab }) {
   );
 
   const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-  const regName = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|.|\*]+$/; //숫자나 특수문자( . 제외)는 포함될 수 없습니다.
+  const regName = /^[ㄱ-ㅎ|가-힣|a-z|A-Z|.| |\*]+$/; //숫자나 특수문자( . 제외)는 포함될 수 없습니다.
   const regPassword = /^[a-zA-Z0-9!@#$%\^&*)(+=._-]{8,}$/; //영문대소문,숫자,특수문자,최소8자
 
-  function inputEmail(e) {
+  function inputhandler(e) {
     const { name, value } = e.target;
-    if (!(name === "email" && regEmail.test(value)) && emailFilled) {
-      setError2(true);
-    } else {
+    setError1(false);
+    if (name === "email" && regEmail.test(value)) {
       setError2(false);
     }
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    if (value === "") {
-      setError2(false);
-    }
-  }
-
-  function inputName(e) {
-    const { name, value } = e.target;
-    if (!(name === "name" && regName.test(value))) {
-      setError3(true);
-    } else {
+    if (name === "name" && regName.test(value)) {
       setError3(false);
     }
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    if (value === "") {
-      setError3(false);
-    }
-  }
-
-  function inputPw(e) {
-    const { name, value } = e.target;
-    if (
-      !(name === "password" && regPassword.test(value)) &&
-      value.length >= 6
-    ) {
-      setError4(true);
-    } else {
+    if (name === "password" && regPassword.test(value)) {
       setError4(false);
     }
     setState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-    if (value === "") {
-      setError4(false);
-    }
   }
 
   function btnRegister(e) {
@@ -96,7 +62,7 @@ function Register(props, { setActiveTab }) {
     if (!regPassword.test(password)) {
       setError4(true);
     }
-    if (!(error2 && error3 && error4)) {
+    if (!error2 && !error3 && !error4) {
       getFetch();
     }
   }
@@ -143,6 +109,7 @@ function Register(props, { setActiveTab }) {
   }
 
   function closeIcon(param) {
+    //closeIcon 클릭시 해당 input의 state값을 "" 으로, error를 false
     if (param === "email") {
       setError1(false);
       setError2(false);
@@ -161,6 +128,7 @@ function Register(props, { setActiveTab }) {
   }
 
   function eyeIcon() {
+    //eyeIcon 클릭시 password input type을 password또는text로 바꿔줍니다
     setPwVisibility(!pwvisibility);
   }
 
@@ -180,7 +148,7 @@ function Register(props, { setActiveTab }) {
             placeholder="이메일"
             className="error correctEmail errorForEmail typingEmail"
             name="email"
-            onChange={inputEmail}
+            onChange={inputhandler}
             value={state.email}
           />
           {error1 && (
@@ -207,7 +175,7 @@ function Register(props, { setActiveTab }) {
             placeholder="이름"
             className="error errorForName typingName"
             name="name"
-            onChange={inputName}
+            onChange={inputhandler}
             value={state.name}
           />
           {error3 && nameFilled && (
@@ -227,7 +195,7 @@ function Register(props, { setActiveTab }) {
             type={pwvisibility ? "text" : "password"}
             className="error errorForPw typingPw"
             name="password"
-            onChange={inputPw}
+            onChange={inputhandler}
             value={state.password}
           />
           {pwFilled && pwvisibility && (
