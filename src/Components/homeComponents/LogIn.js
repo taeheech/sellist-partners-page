@@ -28,6 +28,7 @@ function LogIn(props) {
 
   const [pwvisibility, setPwVisibility] = useState(false);
   const [open, setOpen] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 
@@ -71,6 +72,7 @@ function LogIn(props) {
             //로그인성공
             localStorage.setItem("access_token", res.data.access_token);
             setOpen(true); //snackbar
+            setUserName(res.data.name);
           } else if (res.error.type === 3) {
             setError2(true); //계정존재 XX
           } else if (res.error.type === 4) {
@@ -171,7 +173,7 @@ function LogIn(props) {
           autoHideDuration={3000}
         >
           <SnackbarContent
-            message={`로그인을 환영합니다 !`}
+            message={`${userName}님, 로그인을 환영합니다!`}
             style={{
               backgroundColor: "#757575",
             }}
