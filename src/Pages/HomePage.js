@@ -9,8 +9,8 @@ import Img2 from "../Images/MaskGroup2.png";
 function HomePage(props) {
   return (
     <Container>
-      <ImgRight src={Img1} />
-      <ImgLeft src={Img2} />
+      <ImgRight src={Img2} />
+      <ImgLeft src={Img1} />
       <Home props={props} />
     </Container>
   );

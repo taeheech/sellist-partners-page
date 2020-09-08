@@ -9,8 +9,8 @@ import Img2 from "../Images/MaskGroup2.png";
 function ForgotPasswordPage(props) {
   return (
     <Container>
-      <ImgRight src={Img1} />
-      <ImgLeft src={Img2} />
+      <ImgRight src={Img2} />
+      <ImgLeft src={Img1} />
       <ForgotPassword props={props} />
     </Container>
   );

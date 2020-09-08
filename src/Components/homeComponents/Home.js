@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import LogIn from "./LogIn";
 import Register from "./Register";
-import { center, container, topbar } from "../../Config/commonStyles";
+import { center, container, topbar, header } from "../../Config/commonStyles";
 
 import Logo from "../../Images/Logo";
 import Partners from "../../Images/Partners";
@@ -64,32 +64,7 @@ const Content = styled.div``;
 
 const TopBar = topbar;
 
-const Header = styled.div`
-  margin-top: 10%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  div {
-    position: relative;
-    width: 154px;
-    height: 58px;
-
-    .logo {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-
-    .partners {
-      width: 67px;
-      height: 23px;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-    }
-  }
-`;
+const Header = header;
 
 const Tab = styled.div`
   margin-top: 10%;
