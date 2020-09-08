@@ -61,8 +61,12 @@ function Register(props, { setActiveTab }) {
     }
     if (!regPassword.test(password)) {
       setError4(true);
-    } else if (!error2 && !error3 && !error4) {
-      console.log("가입");
+    }
+    if (
+      regEmail.test(email) &&
+      regName.test(name) &&
+      regPassword.test(password)
+    ) {
       getFetch();
     }
   }
@@ -131,6 +135,8 @@ function Register(props, { setActiveTab }) {
     //eyeIcon 클릭시 password input type을 password또는text로 바꿔줍니다
     setPwVisibility(!pwvisibility);
   }
+
+  console.log(error4, pwFilled);
 
   return (
     <>
@@ -337,7 +343,8 @@ const InputBox = styled.div`
 
 const FooterBox = styled.div`
   ${({ error4 }) => !error4 && `margin-top: 7%;`}
-  ${({ error4, pwFilled }) => error4 && `margin-top: 2.8%;`}
+  ${({ error4, pwFilled }) => error4 && !pwFilled && `margin-top: 7%;`}
+  ${({ error4, pwFilled }) => error4 && pwFilled && `margin-top: 2.8%;`}
   display: flex;
   flex-direction: column;
   padding-right: 16px;
