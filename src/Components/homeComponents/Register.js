@@ -61,8 +61,8 @@ function Register(props, { setActiveTab }) {
     }
     if (!regPassword.test(password)) {
       setError4(true);
-    }
-    if (!error2 && !error3 && !error4) {
+    } else if (!error2 && !error3 && !error4) {
+      console.log("가입");
       getFetch();
     }
   }
@@ -336,7 +336,8 @@ const InputBox = styled.div`
 `;
 
 const FooterBox = styled.div`
-  ${({ error4 }) => (error4 ? `margin-top: 2.8%;` : `margin-top: 7%;`)}
+  ${({ error4 }) => !error4 && `margin-top: 7%;`}
+  ${({ error4, pwFilled }) => error4 && `margin-top: 2.8%;`}
   display: flex;
   flex-direction: column;
   padding-right: 16px;
