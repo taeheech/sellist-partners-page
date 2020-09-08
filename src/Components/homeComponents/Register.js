@@ -20,7 +20,6 @@ function Register(props, { setActiveTab }) {
   const [error4, setError4] = useState(false); //비밀번호는 최소 8자 이상이어야 합니다. -pw
 
   const [open, setOpen] = useState(false);
-  console.log(error1, error2, error3, error4);
 
   const emailFilled = state.email.length > 0;
   const nameFilled = state.name.length > 0;
